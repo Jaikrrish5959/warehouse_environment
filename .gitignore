@@ -1,1 +1,3 @@
-build/\ninstall/\nlog/\n
+build/
+install/
+log/
