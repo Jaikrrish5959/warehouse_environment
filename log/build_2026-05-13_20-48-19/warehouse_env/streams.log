@@ -1,0 +1,60 @@
+[0.009s] Invoking command in '/home/jaikrrishs/Desktop/warehouse_robot/build/warehouse_env': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/jaikrrishs/Desktop/warehouse_robot -DCMAKE_INSTALL_PREFIX=/home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env
+[0.119s] -- The C compiler identification is GNU 13.3.0
+[0.203s] -- The CXX compiler identification is GNU 13.3.0
+[0.221s] -- Detecting C compiler ABI info
+[0.307s] -- Detecting C compiler ABI info - done
+[0.313s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.313s] -- Detecting C compile features
+[0.313s] -- Detecting C compile features - done
+[0.321s] -- Detecting CXX compiler ABI info
+[0.400s] -- Detecting CXX compiler ABI info - done
+[0.410s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.410s] -- Detecting CXX compile features
+[0.411s] -- Detecting CXX compile features - done
+[0.421s] -- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.545s] -- Found Python3: /usr/bin/python3 (found version "3.12.3") found components: Interpreter 
+[0.708s] -- Configuring done (0.7s)
+[0.711s] -- Generating done (0.0s)
+[0.713s] -- Build files have been written to: /home/jaikrrishs/Desktop/warehouse_robot/build/warehouse_env
+[0.719s] Invoked command in '/home/jaikrrishs/Desktop/warehouse_robot/build/warehouse_env' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake /home/jaikrrishs/Desktop/warehouse_robot -DCMAKE_INSTALL_PREFIX=/home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env
+[0.720s] Invoking command in '/home/jaikrrishs/Desktop/warehouse_robot/build/warehouse_env': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/jaikrrishs/Desktop/warehouse_robot/build/warehouse_env -- -j14 -l14
+[0.760s] Invoked command in '/home/jaikrrishs/Desktop/warehouse_robot/build/warehouse_env' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --build /home/jaikrrishs/Desktop/warehouse_robot/build/warehouse_env -- -j14 -l14
+[0.769s] Invoking command in '/home/jaikrrishs/Desktop/warehouse_robot/build/warehouse_env': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/jaikrrishs/Desktop/warehouse_robot/build/warehouse_env
+[0.775s] -- Install configuration: ""
+[0.776s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models
+[0.776s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse
+[0.776s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/model.sdf
+[0.776s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/meshes
+[0.776s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/meshes/warehouse_colision.stl
+[0.776s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/meshes/Tape001_1K_Color.png
+[0.776s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/meshes/warehouse.dae
+[0.777s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/meshes/Asphalt010_1K_Color.jpg
+[0.778s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/meshes/Terrazzo005_1K_Color.jpg
+[0.782s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/meshes/ground.png
+[0.782s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/meshes/Rough_Square_Concrete_Block.jpg
+[0.782s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/thumbnails
+[0.782s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/thumbnails/2.png
+[0.783s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/thumbnails/3.png
+[0.784s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/thumbnails/1.png
+[0.784s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/thumbnails/4.png
+[0.785s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/models/warehouse/model.config
+[0.785s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/worlds
+[0.785s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/worlds/warehouse.sdf
+[0.785s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/launch
+[0.785s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/launch/warehouse.launch.py
+[0.785s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/ament_index/resource_index/package_run_dependencies/warehouse_env
+[0.785s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/ament_index/resource_index/parent_prefix_path/warehouse_env
+[0.785s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/environment/ament_prefix_path.sh
+[0.785s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/environment/ament_prefix_path.dsv
+[0.786s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/environment/path.sh
+[0.786s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/environment/path.dsv
+[0.786s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/local_setup.bash
+[0.786s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/local_setup.sh
+[0.786s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/local_setup.zsh
+[0.786s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/local_setup.dsv
+[0.786s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/package.dsv
+[0.786s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/ament_index/resource_index/packages/warehouse_env
+[0.786s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/cmake/warehouse_envConfig.cmake
+[0.786s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/cmake/warehouse_envConfig-version.cmake
+[0.786s] -- Installing: /home/jaikrrishs/Desktop/warehouse_robot/install/warehouse_env/share/warehouse_env/package.xml
+[0.787s] Invoked command in '/home/jaikrrishs/Desktop/warehouse_robot/build/warehouse_env' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com /usr/bin/cmake --install /home/jaikrrishs/Desktop/warehouse_robot/build/warehouse_env
