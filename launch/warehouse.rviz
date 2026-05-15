@@ -1,0 +1,159 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /TF1
+        - /LaserScan1
+        - /RobotModel1
+        - /Camera1
+  - Class: rviz_common/Views
+    Name: Views
+
+Visualization Manager:
+  Class: ""
+  Displays:
+    # Grid
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Value: true
+      Plane Cell Count: 50
+      Cell Size: 1
+
+    # TF Frames
+    - Class: rviz_default_plugins/TF
+      Name: TF
+      Value: true
+      Show Names: false
+      Show Arrows: true
+      Show Axes: true
+      Update Interval: 0
+      Frame Timeout: 15
+
+    # Robot Model
+    - Class: rviz_default_plugins/RobotModel
+      Name: RobotModel
+      Value: true
+      Description Source: Topic
+      Description Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /robot_description
+      Alpha: 1
+
+    # Laser Scan
+    - Class: rviz_default_plugins/LaserScan
+      Name: LaserScan
+      Value: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Best Effort
+        Value: /scan
+      Size (m): 0.08
+      Style: Flat Squares
+      Color Transformer: FlatColor
+      Color: 255; 0; 0
+      Min Intensity: 0
+      Max Intensity: 4096
+      Autocompute Intensity Bounds: true
+
+    # Camera Image
+    - Class: rviz_default_plugins/Image
+      Name: Camera
+      Value: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /camera/image_raw
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Normalize Range: true
+
+    # Map (for Nav2)
+    - Class: rviz_default_plugins/Map
+      Name: Map
+      Value: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map
+      Alpha: 0.7
+      Draw Behind: true
+
+    # Global Costmap
+    - Class: rviz_default_plugins/Map
+      Name: Global Costmap
+      Value: false
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /global_costmap/costmap
+      Alpha: 0.3
+      Color Scheme: costmap
+
+    # Planned Path
+    - Class: rviz_default_plugins/Path
+      Name: Global Path
+      Value: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /plan
+      Color: 0; 255; 0
+      Alpha: 1
+
+  Global Options:
+    Fixed Frame: odom
+    Frame Rate: 30
+
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+    - Class: rviz_default_plugins/SetInitialPose
+      Topic:
+        Value: /initialpose
+    - Class: rviz_default_plugins/SetGoal
+      Topic:
+        Value: /goal_pose
+
+  Value: true
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 8
+      Name: Current View
+      Near Clip Distance: 0.01
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+      Focal Shape Fixed Size: true
+      Pitch: 0.7
+      Yaw: 3.14
+      Value: Orbit (rviz)
+
+Window Geometry:
+  Height: 900
+  Width: 1400
+  X: 50
+  Y: 50
+  Displays:
+    collapsed: false
+  Views:
+    collapsed: false

@@ -11,7 +11,18 @@ install(DIRECTORY
   models
   worlds
   launch
+  config
+  description
   DESTINATION share/${PROJECT_NAME}
+)
+
+install(PROGRAMS
+  scripts/obstacle_avoidance.py
+  scripts/proximity_monitor.py
+  scripts/scan_frame_relay.py
+  scripts/twist_stamper.py
+  scripts/wasd_teleop.py
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_package()
