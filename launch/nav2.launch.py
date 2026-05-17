@@ -3,7 +3,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable, TimerAction
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -37,6 +37,8 @@ def generate_launch_description():
         description='Full path to map YAML file (leave empty to use SLAM)')
 
     # ── SLAM Toolbox (online async) ────────────────────────────────────
+    # NOTE: slam_toolbox has its OWN lifecycle manager inside
+    # online_async_launch.py — do NOT add it to Nav2's lifecycle_nodes.
     slam = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(pkg_share, 'launch', 'online_async_launch.py')),
@@ -64,6 +66,7 @@ def generate_launch_description():
         param_rewrites=param_substitutions,
         convert_types=True)
 
+    # Nav2 nodes managed by the Nav2 lifecycle manager
     lifecycle_nodes = [
         'controller_server',
         'planner_server',
@@ -106,16 +109,29 @@ def generate_launch_description():
         parameters=[configured_params],
         remappings=remappings)
 
-    # Lifecycle manager
-    lifecycle_manager = Node(
-        package='nav2_lifecycle_manager',
-        executable='lifecycle_manager',
-        name='lifecycle_manager_navigation',
-        output='screen',
-        parameters=[
-            {'use_sim_time': use_sim_time},
-            {'autostart': autostart},
-            {'node_names': lifecycle_nodes}])
+    # Lifecycle manager — delayed 5 s so all Nav2 nodes fully register
+    # their lifecycle services before the manager tries to configure them.
+    lifecycle_manager = TimerAction(
+        period=5.0,
+        actions=[
+            Node(
+                package='nav2_lifecycle_manager',
+                executable='lifecycle_manager',
+                name='lifecycle_manager_navigation',
+                output='screen',
+                parameters=[
+                    {'use_sim_time': use_sim_time},
+                    {'autostart': autostart},
+                    {'node_names': lifecycle_nodes}])
+        ])
+
+    # ── Collision Guard — emergency stop at 0.45 m ─────────────────────
+    collision_guard = Node(
+        package='warehouse_env',
+        executable='collision_guard.py',
+        name='collision_guard',
+        parameters=[{'use_sim_time': True}],
+        output='screen')
 
     return LaunchDescription([
         SetEnvironmentVariable('RCUTILS_LOGGING_BUFFERED_STREAM', '1'),
@@ -129,4 +145,5 @@ def generate_launch_description():
         behavior_server,
         bt_navigator,
         lifecycle_manager,
+        collision_guard,
     ])
