@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rdf:RDF [
+  <!ENTITY owl  "http://www.w3.org/2002/07/owl#">
+  <!ENTITY rdf  "http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#">
+  <!ENTITY xsd  "http://www.w3.org/2001/XMLSchema#">
+  <!ENTITY wh   "http://warehouse-robot.local/ontology#">
+]>
+<rdf:RDF xmlns:owl="&owl;" xmlns:rdf="&rdf;" xmlns:rdfs="&rdfs;"
+         xmlns:xsd="&xsd;" xmlns:wh="&wh;"
+         xml:base="http://warehouse-robot.local/ontology">
+
+  <owl:Ontology rdf:about="http://warehouse-robot.local/ontology">
+    <rdfs:label>Warehouse Robot Navigation Ontology</rdfs:label>
+    <rdfs:comment>OWL ontology for the Articubot warehouse simulation. Defines spatial
+    entities, restricted zones (yellow-black hazard markings), the robot platform,
+    sensors, navigation stack, coordinate frames, and safety constraints.</rdfs:comment>
+    <owl:versionInfo>2.0.0</owl:versionInfo>
+  </owl:Ontology>
+
+  <!-- ════════════════════ CLASSES ════════════════════ -->
+
+  <owl:Class rdf:about="&wh;SpatialEntity">
+    <rdfs:label>Spatial Entity</rdfs:label>
+  </owl:Class>
+
+  <owl:Class rdf:about="&wh;Zone">
+    <rdfs:subClassOf rdf:resource="&wh;SpatialEntity"/>
+    <rdfs:label>Zone</rdfs:label>
+  </owl:Class>
+
+  <owl:Class rdf:about="&wh;NavigableZone">
+    <rdfs:subClassOf rdf:resource="&wh;Zone"/>
+    <rdfs:label>Navigable Zone</rdfs:label>
+    <rdfs:comment>Area the robot IS allowed to traverse.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="&wh;RestrictedZone">
+    <rdfs:subClassOf rdf:resource="&wh;Zone"/>
+    <rdfs:label>Restricted Zone</rdfs:label>
+    <rdfs:comment>Yellow-black hazard-marked area the robot must NOT enter.
+    The collision_guard and Nav2 costmap keepout filter use these boundaries.</rdfs:comment>
+  </owl:Class>
+
+  <owl:Class rdf:about="&wh;Aisle">
+    <rdfs:subClassOf rdf:resource="&wh;NavigableZone"/>
+    <rdfs:label>Aisle</rdfs:label>
+  </owl:Class>
+
+  <owl:Class rdf:about="&wh;StartZone">
+    <rdfs:subClassOf rdf:resource="&wh;NavigableZone"/>
+    <rdfs:label>Start Zone</rdfs:label>
+  </owl:Class>
+
+  <owl:Class rdf:about="&wh;Obstacle">
+    <rdfs:subClassOf rdf:resource="&wh;SpatialEntity"/>
+    <rdfs:label>Obstacle</rdfs:label>
+  </owl:Class>
+
+  <owl:Class rdf:about="&wh;Shelf">
+    <rdfs:subClassOf rdf:resource="&wh;Obstacle"/>
+  </owl:Class>
+  <owl:Class rdf:about="&wh;ShelfBig">
+    <rdfs:subClassOf rdf:resource="&wh;Shelf"/>
+  </owl:Class>
+  <owl:Class rdf:about="&wh;ShelfSmall">
+    <rdfs:subClassOf rdf:resource="&wh;Shelf"/>
+  </owl:Class>
+
+  <owl:Class rdf:about="&wh;PalletBox">
+    <rdfs:subClassOf rdf:resource="&wh;Obstacle"/>
+  </owl:Class>
+  <owl:Class rdf:about="&wh;TransportBox">
+    <rdfs:subClassOf rdf:resource="&wh;SpatialEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="&wh;ConveyorBelt">
+    <rdfs:subClassOf rdf:resource="&wh;SpatialEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="&wh;Wall">
+    <rdfs:subClassOf rdf:resource="&wh;Obstacle"/>
+  </owl:Class>
+  <owl:Class rdf:about="&wh;LaneMarking">
+    <rdfs:subClassOf rdf:resource="&wh;SpatialEntity"/>
+    <rdfs:comment>Visual floor stripe for path guidance.</rdfs:comment>
+  </owl:Class>
+
+  <!-- Robot & Sensors -->
+  <owl:Class rdf:about="&wh;Robot">
+    <rdfs:subClassOf rdf:resource="&wh;SpatialEntity"/>
+  </owl:Class>
+  <owl:Class rdf:about="&wh;DifferentialDriveRobot">
+    <rdfs:subClassOf rdf:resource="&wh;Robot"/>
+  </owl:Class>
+  <owl:Class rdf:about="&wh;Sensor"/>
+  <owl:Class rdf:about="&wh;Lidar">
+    <rdfs:subClassOf rdf:resource="&wh;Sensor"/>
+  </owl:Class>
+  <owl:Class rdf:about="&wh;Camera">
+    <rdfs:subClassOf rdf:resource="&wh;Sensor"/>
+  </owl:Class>
+
+  <!-- Navigation -->
+  <owl:Class rdf:about="&wh;NavigationStack"/>
+  <owl:Class rdf:about="&wh;SLAMSystem"/>
+  <owl:Class rdf:about="&wh;Costmap"/>
+  <owl:Class rdf:about="&wh;CoordinateFrame"/>
+
+  <!-- Safety -->
+  <owl:Class rdf:about="&wh;SafetyBehavior"/>
+  <owl:Class rdf:about="&wh;EmergencyStop">
+    <rdfs:subClassOf rdf:resource="&wh;SafetyBehavior"/>
+  </owl:Class>
+
+  <!-- ════════════════════ PROPERTIES ════════════════════ -->
+
+  <owl:ObjectProperty rdf:about="&wh;hasSensor">
+    <rdfs:domain rdf:resource="&wh;Robot"/>
+    <rdfs:range rdf:resource="&wh;Sensor"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&wh;locatedIn">
+    <rdfs:domain rdf:resource="&wh;SpatialEntity"/>
+    <rdfs:range rdf:resource="&wh;Zone"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&wh;adjacentTo">
+    <rdf:type rdf:resource="&owl;SymmetricProperty"/>
+    <rdfs:domain rdf:resource="&wh;Zone"/>
+    <rdfs:range rdf:resource="&wh;Zone"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&wh;bordersRestrictedZone">
+    <rdfs:domain rdf:resource="&wh;NavigableZone"/>
+    <rdfs:range rdf:resource="&wh;RestrictedZone"/>
+    <rdfs:comment>Links a navigable zone to a restricted zone it must not cross into.</rdfs:comment>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&wh;usesNavStack">
+    <rdfs:domain rdf:resource="&wh;Robot"/>
+    <rdfs:range rdf:resource="&wh;NavigationStack"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&wh;usesSLAM">
+    <rdfs:domain rdf:resource="&wh;Robot"/>
+    <rdfs:range rdf:resource="&wh;SLAMSystem"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&wh;hasSafetyBehavior">
+    <rdfs:domain rdf:resource="&wh;Robot"/>
+    <rdfs:range rdf:resource="&wh;SafetyBehavior"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="&wh;parentFrame">
+    <rdfs:domain rdf:resource="&wh;CoordinateFrame"/>
+    <rdfs:range rdf:resource="&wh;CoordinateFrame"/>
+  </owl:ObjectProperty>
+
+  <owl:DatatypeProperty rdf:about="&wh;positionX">
+    <rdfs:range rdf:resource="&xsd;float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&wh;positionY">
+    <rdfs:range rdf:resource="&xsd;float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&wh;boundMinX">
+    <rdfs:range rdf:resource="&xsd;float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&wh;boundMaxX">
+    <rdfs:range rdf:resource="&xsd;float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&wh;boundMinY">
+    <rdfs:range rdf:resource="&xsd;float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&wh;boundMaxY">
+    <rdfs:range rdf:resource="&xsd;float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&wh;maxRange">
+    <rdfs:range rdf:resource="&xsd;float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&wh;stopDistance">
+    <rdfs:range rdf:resource="&xsd;float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&wh;wheelSeparation">
+    <rdfs:range rdf:resource="&xsd;float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&wh;wheelRadius">
+    <rdfs:range rdf:resource="&xsd;float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&wh;robotRadius">
+    <rdfs:range rdf:resource="&xsd;float"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&wh;frameName">
+    <rdfs:range rdf:resource="&xsd;string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="&wh;hazardType">
+    <rdfs:domain rdf:resource="&wh;RestrictedZone"/>
+    <rdfs:range rdf:resource="&xsd;string"/>
+    <rdfs:comment>Type of hazard: loading_dock, machinery, conveyor_area, etc.</rdfs:comment>
+  </owl:DatatypeProperty>
+
+  <!-- ════════════════════ ROBOT ════════════════════ -->
+
+  <owl:NamedIndividual rdf:about="&wh;Articubot">
+    <rdf:type rdf:resource="&wh;DifferentialDriveRobot"/>
+    <rdfs:label>Articubot</rdfs:label>
+    <wh:wheelSeparation rdf:datatype="&xsd;float">0.297</wh:wheelSeparation>
+    <wh:wheelRadius rdf:datatype="&xsd;float">0.033</wh:wheelRadius>
+    <wh:robotRadius rdf:datatype="&xsd;float">0.22</wh:robotRadius>
+    <wh:positionX rdf:datatype="&xsd;float">0.0</wh:positionX>
+    <wh:positionY rdf:datatype="&xsd;float">0.0</wh:positionY>
+    <wh:hasSensor rdf:resource="&wh;ArticubotLidar"/>
+    <wh:hasSensor rdf:resource="&wh;ArticubotCamera"/>
+    <wh:usesNavStack rdf:resource="&wh;Nav2Stack"/>
+    <wh:usesSLAM rdf:resource="&wh;SLAMToolbox"/>
+    <wh:hasSafetyBehavior rdf:resource="&wh;CollisionGuardEStop"/>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;ArticubotLidar">
+    <rdf:type rdf:resource="&wh;Lidar"/>
+    <rdfs:label>GPU Lidar 360°</rdfs:label>
+    <wh:maxRange rdf:datatype="&xsd;float">12.0</wh:maxRange>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;ArticubotCamera">
+    <rdf:type rdf:resource="&wh;Camera"/>
+    <rdfs:label>RGB Camera</rdfs:label>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;Nav2Stack">
+    <rdf:type rdf:resource="&wh;NavigationStack"/>
+    <rdfs:label>Nav2 (ROS 2 Jazzy)</rdfs:label>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;SLAMToolbox">
+    <rdf:type rdf:resource="&wh;SLAMSystem"/>
+    <rdfs:label>SLAM Toolbox (online async)</rdfs:label>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;CollisionGuardEStop">
+    <rdf:type rdf:resource="&wh;EmergencyStop"/>
+    <rdfs:label>Collision Guard E-Stop</rdfs:label>
+    <wh:stopDistance rdf:datatype="&xsd;float">0.45</wh:stopDistance>
+  </owl:NamedIndividual>
+
+  <!-- ════════════════════ TF FRAMES ════════════════════ -->
+
+  <owl:NamedIndividual rdf:about="&wh;MapFrame">
+    <rdf:type rdf:resource="&wh;CoordinateFrame"/>
+    <wh:frameName rdf:datatype="&xsd;string">map</wh:frameName>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="&wh;OdomFrame">
+    <rdf:type rdf:resource="&wh;CoordinateFrame"/>
+    <wh:frameName rdf:datatype="&xsd;string">odom</wh:frameName>
+    <wh:parentFrame rdf:resource="&wh;MapFrame"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="&wh;BaseLinkFrame">
+    <rdf:type rdf:resource="&wh;CoordinateFrame"/>
+    <wh:frameName rdf:datatype="&xsd;string">base_link</wh:frameName>
+    <wh:parentFrame rdf:resource="&wh;OdomFrame"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="&wh;LaserFrame">
+    <rdf:type rdf:resource="&wh;CoordinateFrame"/>
+    <wh:frameName rdf:datatype="&xsd;string">laser_frame</wh:frameName>
+    <wh:parentFrame rdf:resource="&wh;BaseLinkFrame"/>
+  </owl:NamedIndividual>
+
+  <!-- ════════════════════ RESTRICTED ZONES ════════════════════ -->
+  <!-- Yellow-black hazard stripes visible on the warehouse floor.
+       These are loading docks / machinery zones that the robot must avoid.
+       Boundaries are axis-aligned bounding boxes (minX,minY → maxX,maxY). -->
+
+  <owl:NamedIndividual rdf:about="&wh;RestrictedZone_LoadingDock_SW">
+    <rdf:type rdf:resource="&wh;RestrictedZone"/>
+    <rdfs:label>Loading Dock SW (yellow-black stripes)</rdfs:label>
+    <rdfs:comment>Large yellow-black marked rectangle at the south-west corner
+    of the warehouse, near the main entrance doors.</rdfs:comment>
+    <wh:hazardType rdf:datatype="&xsd;string">loading_dock</wh:hazardType>
+    <wh:boundMinX rdf:datatype="&xsd;float">-12.0</wh:boundMinX>
+    <wh:boundMaxX rdf:datatype="&xsd;float">-6.0</wh:boundMaxX>
+    <wh:boundMinY rdf:datatype="&xsd;float">-3.5</wh:boundMinY>
+    <wh:boundMaxY rdf:datatype="&xsd;float">3.5</wh:boundMaxY>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;RestrictedZone_LoadingDock_S">
+    <rdf:type rdf:resource="&wh;RestrictedZone"/>
+    <rdfs:label>Loading Dock South (yellow-black stripes)</rdfs:label>
+    <rdfs:comment>Yellow-black marked zone south of the main aisle,
+    adjacent to the warehouse entrance gate.</rdfs:comment>
+    <wh:hazardType rdf:datatype="&xsd;string">loading_dock</wh:hazardType>
+    <wh:boundMinX rdf:datatype="&xsd;float">-5.0</wh:boundMinX>
+    <wh:boundMaxX rdf:datatype="&xsd;float">-1.0</wh:boundMaxX>
+    <wh:boundMinY rdf:datatype="&xsd;float">-8.0</wh:boundMinY>
+    <wh:boundMaxY rdf:datatype="&xsd;float">-4.0</wh:boundMaxY>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;RestrictedZone_LoadingDock_SE">
+    <rdf:type rdf:resource="&wh;RestrictedZone"/>
+    <rdfs:label>Loading Dock SE (yellow-black stripes)</rdfs:label>
+    <rdfs:comment>Yellow-black hazard zone at the south-east near big shelves.</rdfs:comment>
+    <wh:hazardType rdf:datatype="&xsd;string">loading_dock</wh:hazardType>
+    <wh:boundMinX rdf:datatype="&xsd;float">8.0</wh:boundMinX>
+    <wh:boundMaxX rdf:datatype="&xsd;float">15.0</wh:boundMaxX>
+    <wh:boundMinY rdf:datatype="&xsd;float">-8.0</wh:boundMinY>
+    <wh:boundMaxY rdf:datatype="&xsd;float">-4.0</wh:boundMaxY>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;RestrictedZone_NorthDock">
+    <rdf:type rdf:resource="&wh;RestrictedZone"/>
+    <rdfs:label>North Loading Dock (yellow-black stripes)</rdfs:label>
+    <rdfs:comment>Hazard markings at the north side near pallet storage area.</rdfs:comment>
+    <wh:hazardType rdf:datatype="&xsd;string">loading_dock</wh:hazardType>
+    <wh:boundMinX rdf:datatype="&xsd;float">-8.0</wh:boundMinX>
+    <wh:boundMaxX rdf:datatype="&xsd;float">-4.0</wh:boundMaxX>
+    <wh:boundMinY rdf:datatype="&xsd;float">12.0</wh:boundMinY>
+    <wh:boundMaxY rdf:datatype="&xsd;float">16.0</wh:boundMaxY>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;RestrictedZone_ConveyorArea">
+    <rdf:type rdf:resource="&wh;RestrictedZone"/>
+    <rdfs:label>Conveyor Belt Safety Zone</rdfs:label>
+    <rdfs:comment>Safety perimeter around the conveyor belt drop-off station.
+    Robot may approach but not drive onto the belt.</rdfs:comment>
+    <wh:hazardType rdf:datatype="&xsd;string">conveyor_area</wh:hazardType>
+    <wh:boundMinX rdf:datatype="&xsd;float">1.3</wh:boundMinX>
+    <wh:boundMaxX rdf:datatype="&xsd;float">3.7</wh:boundMaxX>
+    <wh:boundMinY rdf:datatype="&xsd;float">-4.0</wh:boundMinY>
+    <wh:boundMaxY rdf:datatype="&xsd;float">-3.0</wh:boundMaxY>
+  </owl:NamedIndividual>
+
+  <!-- ════════════════════ NAVIGABLE ZONES ════════════════════ -->
+
+  <owl:NamedIndividual rdf:about="&wh;SpawnZone">
+    <rdf:type rdf:resource="&wh;StartZone"/>
+    <rdfs:label>Robot Spawn Zone</rdfs:label>
+    <wh:positionX rdf:datatype="&xsd;float">0.0</wh:positionX>
+    <wh:positionY rdf:datatype="&xsd;float">0.0</wh:positionY>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;MainAisle">
+    <rdf:type rdf:resource="&wh;Aisle"/>
+    <rdfs:label>Main Horizontal Aisle (Y=0)</rdfs:label>
+    <wh:positionY rdf:datatype="&xsd;float">0.0</wh:positionY>
+    <wh:bordersRestrictedZone rdf:resource="&wh;RestrictedZone_LoadingDock_SW"/>
+    <wh:bordersRestrictedZone rdf:resource="&wh;RestrictedZone_LoadingDock_S"/>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;SouthAisle">
+    <rdf:type rdf:resource="&wh;Aisle"/>
+    <rdfs:label>South Aisle (Y=-3.5)</rdfs:label>
+    <wh:positionY rdf:datatype="&xsd;float">-3.5</wh:positionY>
+    <wh:bordersRestrictedZone rdf:resource="&wh;RestrictedZone_ConveyorArea"/>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;NorthAisle">
+    <rdf:type rdf:resource="&wh;Aisle"/>
+    <rdfs:label>North Aisle (Y=3.8)</rdfs:label>
+    <wh:positionY rdf:datatype="&xsd;float">3.8</wh:positionY>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;CenterAisle">
+    <rdf:type rdf:resource="&wh;Aisle"/>
+    <rdfs:label>Center Vertical Aisle (X=0.5)</rdfs:label>
+    <wh:positionX rdf:datatype="&xsd;float">0.5</wh:positionX>
+  </owl:NamedIndividual>
+
+  <!-- ════════════════════ SHELVES ════════════════════ -->
+
+  <owl:NamedIndividual rdf:about="&wh;ShelfBig0">
+    <rdf:type rdf:resource="&wh;ShelfBig"/>
+    <wh:positionX rdf:datatype="&xsd;float">-9.34</wh:positionX>
+    <wh:positionY rdf:datatype="&xsd;float">-13.56</wh:positionY>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="&wh;Shelf0">
+    <rdf:type rdf:resource="&wh;ShelfSmall"/>
+    <wh:positionX rdf:datatype="&xsd;float">-4.42</wh:positionX>
+    <wh:positionY rdf:datatype="&xsd;float">-0.69</wh:positionY>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="&wh;Shelf1">
+    <rdf:type rdf:resource="&wh;ShelfSmall"/>
+    <wh:positionX rdf:datatype="&xsd;float">-4.42</wh:positionX>
+    <wh:positionY rdf:datatype="&xsd;float">2.31</wh:positionY>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="&wh;Shelf2">
+    <rdf:type rdf:resource="&wh;ShelfSmall"/>
+    <wh:positionX rdf:datatype="&xsd;float">-4.42</wh:positionX>
+    <wh:positionY rdf:datatype="&xsd;float">5.31</wh:positionY>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="&wh;Shelf3">
+    <rdf:type rdf:resource="&wh;ShelfSmall"/>
+    <wh:positionX rdf:datatype="&xsd;float">-4.42</wh:positionX>
+    <wh:positionY rdf:datatype="&xsd;float">8.34</wh:positionY>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="&wh;Shelf4">
+    <rdf:type rdf:resource="&wh;ShelfSmall"/>
+    <wh:positionX rdf:datatype="&xsd;float">5.60</wh:positionX>
+    <wh:positionY rdf:datatype="&xsd;float">8.34</wh:positionY>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="&wh;Shelf5">
+    <rdf:type rdf:resource="&wh;ShelfSmall"/>
+    <wh:positionX rdf:datatype="&xsd;float">5.60</wh:positionX>
+    <wh:positionY rdf:datatype="&xsd;float">5.31</wh:positionY>
+  </owl:NamedIndividual>
+
+  <!-- ════════════════════ OTHER OBJECTS ════════════════════ -->
+
+  <owl:NamedIndividual rdf:about="&wh;ConveyorBelt1">
+    <rdf:type rdf:resource="&wh;ConveyorBelt"/>
+    <rdfs:label>Conveyor Belt (drop-off)</rdfs:label>
+    <wh:positionX rdf:datatype="&xsd;float">2.5</wh:positionX>
+    <wh:positionY rdf:datatype="&xsd;float">-3.5</wh:positionY>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;TransportBox1">
+    <rdf:type rdf:resource="&wh;TransportBox"/>
+    <rdfs:label>Red Transport Box</rdfs:label>
+    <wh:positionX rdf:datatype="&xsd;float">-3.5</wh:positionX>
+    <wh:positionY rdf:datatype="&xsd;float">2.3</wh:positionY>
+    <wh:locatedIn rdf:resource="&wh;Shelf1"/>
+  </owl:NamedIndividual>
+
+  <owl:NamedIndividual rdf:about="&wh;TransportBox2">
+    <rdf:type rdf:resource="&wh;TransportBox"/>
+    <rdfs:label>Blue Transport Box</rdfs:label>
+    <wh:positionX rdf:datatype="&xsd;float">-3.5</wh:positionX>
+    <wh:positionY rdf:datatype="&xsd;float">11.34</wh:positionY>
+  </owl:NamedIndividual>
+
+</rdf:RDF>
