@@ -14,6 +14,7 @@ Sectors (based on 360° scan, 0° = front):
 import math
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, ReliabilityPolicy, DurabilityPolicy
 from sensor_msgs.msg import LaserScan
 
 
@@ -34,8 +35,15 @@ class ProximityMonitor(Node):
 
     def __init__(self):
         super().__init__('proximity_monitor')
+
+        sensor_qos = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            durability=DurabilityPolicy.VOLATILE,
+            depth=5
+        )
+
         self.subscription = self.create_subscription(
-            LaserScan, '/scan', self.scan_callback, 10)
+            LaserScan, '/scan', self.scan_callback, sensor_qos)
         self.get_logger().info(
             f'{GREEN}Proximity Monitor started — listening on /scan{RESET}')
         # Throttle printing to ~2 Hz
