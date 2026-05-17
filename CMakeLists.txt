@@ -8,15 +8,17 @@ endif()
 find_package(ament_cmake REQUIRED)
 
 install(DIRECTORY
-  models
-  worlds
-  launch
   config
   description
+  launch
+  models
+  ontology
+  worlds
   DESTINATION share/${PROJECT_NAME}
 )
 
 install(PROGRAMS
+  scripts/collision_guard.py
   scripts/obstacle_avoidance.py
   scripts/proximity_monitor.py
   scripts/scan_frame_relay.py
